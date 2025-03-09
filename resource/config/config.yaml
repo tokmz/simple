@@ -1,0 +1,214 @@
+server:
+  port: 8080
+  mode: debug
+  static: ./resource/static
+  read_timeout: 10s
+  write_timeout: 10s
+
+# JWT配置
+jwt:
+  # 签名方法: HS256, HS384, HS512, RS256, RS384, RS512, ES256, ES384, ES512
+  signing_method: "HS256"
+  # 签名密钥
+  signing_key: "your-secret-key"
+  # Token过期时间
+  expiration:
+    # 访问令牌过期时间
+    access_token: 2h
+    # 刷新令牌过期时间
+    refresh_token: 168h # 7天
+  # Token发行者
+  issuer: "simple"
+  # Token主题
+  subject: "auth"
+  # Token受众
+  audience: ["web", "app", "mini"]
+  # 是否启用黑名单
+  blacklist:
+    enabled: true
+    # 黑名单缓存键前缀
+    prefix: "jwt:blacklist:"
+    # 黑名单过期时间（应大于access_token的过期时间）
+    grace_period: 24h
+  # 令牌选项
+  options:
+    # 是否验证过期时间
+    verify_expiry: true
+    # 是否验证发行时间
+    verify_issued_at: true
+    # 是否验证发行者
+    verify_issuer: true
+    # 是否验证主题
+    verify_subject: true
+    # 是否验证受众
+    verify_audience: true
+    # 是否验证NotBefore
+    verify_not_before: true
+  # 刷新令牌配置
+  refresh:
+    # 是否启用自动刷新
+    auto_refresh: true
+    # 提前刷新时间（Token过期前多久触发刷新）
+    before_expiry: 30m
+    # 是否允许重用刷新令牌
+    reuse: false
+
+database:
+  # 写库配置
+  write:
+    dsn: root:wui11413@tcp(127.0.0.1:3306)/chiling?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+    max_idle_connections: 10
+    max_open_connections: 100
+    conn_max_lifetime: 1h
+  # 读库配置
+  read:
+    - dsn: root:wui11413@tcp(127.0.0.1:3306)/chiling?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+      max_idle_connections: 10
+      max_open_connections: 100
+      conn_max_lifetime: 1h
+  # 策略配置
+  policy:
+    sources: ["write"] # 写库
+    replicas: ["read"] # 读库
+    policy: "random" # 负载均衡策略：random, round-robin
+    tables: ["*"] # 应用到所有表
+  # 日志配置
+  logger:
+    # 日志级别: silent, error, warn, info, debug
+    level: "info"
+    # 慢SQL阈值，单位秒
+    slow_threshold: 1.0
+    # 是否忽略记录未找到的错误
+    ignore_record_not_found: true
+    # 是否开启彩色日志输出
+    colorful: true
+  # 链路追踪配置
+  tracing:
+    # 是否启用数据库操作链路追踪，启用前请确保 telemetry.trace.enabled 为 true
+    enabled: false
+    # 操作名称前缀
+    operation_prefix: "db."
+    # 是否记录SQL语句
+    record_sql: true
+    # 是否记录受影响行数
+    record_affected_rows: true
+
+# Redis配置
+redis:
+  # 模式: single(单机), cluster(集群), sentinel(哨兵)
+  mode: "single"
+  # 单机配置
+  single:
+    host: 127.0.0.1
+    port: 6379
+    password: wui11413
+    db: 0
+  # 集群配置
+  cluster:
+    nodes:
+      - host: "127.0.0.1"
+        port: 7001
+      - host: "127.0.0.1"
+        port: 7002
+      - host: "127.0.0.1"
+        port: 7003
+    password: ""
+    # 集群模式下是否跟随重定向
+    enable_follow_redirect: true
+  # 哨兵配置
+  sentinel:
+    master_name: "mymaster"
+    nodes:
+      - host: "127.0.0.1"
+        port: 26379
+      - host: "127.0.0.1"
+        port: 26380
+      - host: "127.0.0.1"
+        port: 26381
+    password: ""
+    db: 0
+  # 连接池配置
+  pool:
+    # 最大空闲连接数
+    max_idle: 10
+    # 最大活动连接数
+    max_active: 100
+    # 最大空闲时间（秒）
+    idle_timeout: 300s
+    # 连接超时时间（秒）
+    connect_timeout: 5s
+    # 读取超时时间（秒）
+    read_timeout: 3s
+    # 写入超时时间（秒）
+    write_timeout: 3s
+  # 其他配置
+  options:
+    # 前缀
+    prefix: "simple-admin:"
+    # 是否启用压缩
+    enable_compression: false
+    # 最小压缩长度
+    min_compress_len: 64
+    # 是否启用TLS
+    enable_tls: false
+    # 是否跳过证书验证
+    skip_verify: false
+
+# 链路追踪配置
+telemetry:
+  # 服务名称
+  service_name: "simple-admin"
+  # 采样率 (0.0 - 1.0)
+  sampling_rate: 1.0
+  # OpenTelemetry Collector 配置
+  otlp:
+    endpoint: "localhost:4317"
+    insecure: true
+    timeout: 5s
+  # 追踪配置
+  trace:
+    # 是否启用
+    enabled: false
+    # 属性配置
+    attributes:
+      environment: "development"
+      version: "1.0.0"
+  # 指标配置
+  metrics:
+    # 是否启用
+    enabled: true
+    # 上报间隔
+    interval: 5s
+  # 日志配置
+  logs:
+    # 是否启用
+    enabled: true
+    # 日志级别 (debug, info, warn, error)
+    level: "info"
+
+# Zap日志配置
+log:
+  level: "debug" # 日志级别：debug, info, warn, error, dpanic, panic, fatal
+  format: "json" # 日志格式：console(控制台), json
+  output:
+    console: true # 是否在控制台输出
+    file:
+      enabled: true # 是否输出到文件
+      path: "./resource/logs/app.log"
+  rotate:
+    enabled: true # 是否启用日志分割
+    max_size: 10 # 单个日志文件最大大小(MB)
+    max_backups: 7 # 最大保留文件数
+    max_age: 30 # 最大保留天数
+    compress: true # 是否压缩旧日志
+  caller:
+    enabled: true # 是否记录调用者信息
+    skip: 0 # 调用层级跳过数
+  development: true # 开发模式（彩色日志等）
+  sampling:
+    enabled: false # 是否启用采样
+    initial: 100 # 初始样本数
+    thereafter: 100 # 之后的采样频率
+  fields:
+    service: "simple-app" # 服务名
+    env: "dev" # 环境名
