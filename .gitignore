@@ -1,0 +1,66 @@
+# 编译生成的可执行文件和二进制文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go相关临时文件
+*.o
+*.a
+*.prof
+*.trace
+*.cover
+*.bench
+/vendor/
+go.work
+
+# IDE和编辑器文件
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 依赖管理临时文件
+vendor/
+/go.sum.tmp
+/_vendor*
+
+# 日志文件
+*.log
+/resource/logs/
+/logs/
+
+# 临时文件
+tmp/
+temp/
+
+# 本地配置文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+config.local.yaml
+config.dev.yaml
+
+# 构建目录
+/bin/
+/build/
+/dist/
+
+# 缓存文件
+/.cache/
+
+# 测试相关
+coverage.txt
+coverage.html
+/report/
+
+# 自动生成的文件
+/generated/
+*.gen.go 

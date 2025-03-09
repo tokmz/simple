@@ -1,10 +1,12 @@
 package global
 
 import (
-	"gorm.io/gorm"
+	"simple/internal/types/query"
 	"simple/model"
 	"simple/pkg/cache"
 	"simple/pkg/config"
+
+	"gorm.io/gorm"
 )
 
 /*
@@ -20,7 +22,8 @@ var (
 	// Config Viper的管理
 	Config *config.Manager
 	// DB gorm 的db
-	DB *gorm.DB
+	DB    *gorm.DB
+	Query *query.Query
 	// Cache redis client
 	Cache *cache.RedisClient
 )

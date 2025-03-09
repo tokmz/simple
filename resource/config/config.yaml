@@ -56,13 +56,13 @@ jwt:
 database:
   # 写库配置
   write:
-    dsn: root:wui11413@tcp(127.0.0.1:3306)/chiling?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+    dsn: root:wui11413@tcp(127.0.0.1:3306)/simple?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
     max_idle_connections: 10
     max_open_connections: 100
     conn_max_lifetime: 1h
   # 读库配置
   read:
-    - dsn: root:wui11413@tcp(127.0.0.1:3306)/chiling?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+    - dsn: root:wui11413@tcp(127.0.0.1:3306)/simple?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
       max_idle_connections: 10
       max_open_connections: 100
       conn_max_lifetime: 1h

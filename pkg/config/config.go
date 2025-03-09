@@ -24,14 +24,13 @@ func NewManager() *Manager {
 	v := viper.New()
 
 	// 设置配置文件搜索路径
-	v.AddConfigPath("./config")
-	v.AddConfigPath("./configs")
 	v.AddConfigPath("./resource/config")
+	v.AddConfigPath("./config")
+	// v.AddConfigPath("./configs")
 	v.AddConfigPath(".")
 
-	// 支持的配置文件类型
+	// 设置配置文件类型和名称
 	v.SetConfigType("yaml")
-	v.SetConfigType("json")
 	v.SetConfigName("config")
 
 	// 大小写不敏感
